@@ -12,6 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UserDto {
 
+    @JsonIgnore
     private Long id;
     private String name;
     private String email;
