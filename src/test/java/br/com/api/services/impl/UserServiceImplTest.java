@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
@@ -25,6 +26,7 @@ class UserServiceImplTest {
     public static final String EMAIL = "mateus@email.com";
     public static final String PASSWORD = "12345678";
     public static final String OBJETO_NAO_ENCONTRADO = "Objeto não encontrado";
+    public static final int INDEX = 0;
 
     @InjectMocks
     private UserServiceImpl userService;
@@ -73,7 +75,18 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findAll() {
+    void whenFindAllThenReturnAnListOfUsers() {
+        when(userRepository.findAll()).thenReturn(List.of(user));
+
+        List<User> users = userService.findAll();
+
+        assertNotNull(users);
+        assertEquals(1, users.size());
+        assertEquals(User.class, users.get(INDEX).getClass());
+        assertEquals(ID, users.get(INDEX).getId());
+        assertEquals(NAME, users.get(INDEX).getName());
+        assertEquals(EMAIL, users.get(INDEX).getEmail());
+        assertEquals(PASSWORD, users.get(INDEX).getPassword());
     }
 
     @Test
