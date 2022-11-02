@@ -104,11 +104,16 @@ class UserResourceTest {
         assertEquals(ID, userResponse.getBody().getId());
         assertEquals(NAME, userResponse.getBody().getName());
         assertEquals(EMAIL, userResponse.getBody().getEmail());
-
     }
 
     @Test
-    void testDelete() {
+    void whenDeleteReturnSuccess() {
+        doNothing().when(userService).delete(anyLong());
+        ResponseEntity<UserDto> userResponse = userResource.delete(ID);
+        assertNotNull(userResponse);
+        assertEquals(ResponseEntity.class, userResponse.getClass());
+        assertEquals(HttpStatus.NO_CONTENT, userResponse.getStatusCode());
+        verify(userService, times(1)).delete(anyLong());
     }
 
     private void startUser() {
