@@ -3,7 +3,6 @@ package br.com.api.resources;
 import br.com.api.domain.User;
 import br.com.api.domain.dto.UserDto;
 import br.com.api.services.UserService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -12,6 +11,9 @@ import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +45,9 @@ class UserResourceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        MockHttpServletRequest mockHttpServletRequest = new MockHttpServletRequest();
+        ServletRequestAttributes servletRequestAttributes = new ServletRequestAttributes(mockHttpServletRequest);
+        RequestContextHolder.setRequestAttributes(servletRequestAttributes);
         startUser();
     }
 
@@ -80,25 +85,20 @@ class UserResourceTest {
     }
 
     @Test
-    void testCreate() {
-        when(userService.create(any())).thenReturn(new User(Long.valueOf(1), "name", "email", "password"));
-
-        ResponseEntity<UserDto> result = userResource.create(new UserDto(Long.valueOf(1), "name", "email", "password"));
-        Assertions.assertEquals(null, result);
+    void whenCreateThenReturnCreated() {
+        when(userService.create(any())).thenReturn(user);
+        ResponseEntity<UserDto> response = userResource.create(userDto);
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertNotNull(response.getHeaders().get("Location"));
     }
 
     @Test
     void testUpdate() {
-        when(userService.update(any())).thenReturn(new User(Long.valueOf(1), "name", "email", "password"));
-
-        ResponseEntity<UserDto> result = userResource.update(Long.valueOf(1), new UserDto(Long.valueOf(1), "name", "email", "password"));
-        Assertions.assertEquals(null, result);
     }
 
     @Test
     void testDelete() {
-        ResponseEntity<UserDto> result = userResource.delete(Long.valueOf(1));
-        Assertions.assertEquals(null, result);
     }
 
     private void startUser() {
