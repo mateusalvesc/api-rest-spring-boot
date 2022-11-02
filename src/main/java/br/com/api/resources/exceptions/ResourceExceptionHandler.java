@@ -21,7 +21,7 @@ public class ResourceExceptionHandler {
     }
 
     @ExceptionHandler(DataIntegratyViolationException.class)
-    public ResponseEntity<StandardError> dataIntegratyViolationException(DataIntegratyViolationException e, HttpServletRequest request) {
+    public ResponseEntity<StandardError> dataIntegrityViolationException(DataIntegratyViolationException e, HttpServletRequest request) {
         StandardError standardError = new StandardError(LocalDateTime.now(),
                 HttpStatus.BAD_REQUEST.value(), e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(standardError);
