@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 class UserResourceTest {
@@ -43,11 +45,19 @@ class UserResourceTest {
     }
 
     @Test
-    void testFindById() {
-        when(userService.findById(anyLong())).thenReturn(new User(Long.valueOf(1), "name", "email", "password"));
+    void whenFindByIdThenReturnSuccess() {
+        when(userService.findById(anyLong())).thenReturn(user);
+        when(modelMapper.map(any(), any())).thenReturn(userDto);
+        ResponseEntity<UserDto> response = userResource.findById(ID);
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(UserDto.class, response.getBody().getClass());
 
-        ResponseEntity<UserDto> result = userResource.findById(Long.valueOf(1));
-        Assertions.assertEquals(null, result);
+        assertEquals(ID, response.getBody().getId());
+        assertEquals(NAME, response.getBody().getName());
+        assertEquals(EMAIL, response.getBody().getEmail());
+        assertEquals(PASSWORD, response.getBody().getPassword());
     }
 
     @Test
