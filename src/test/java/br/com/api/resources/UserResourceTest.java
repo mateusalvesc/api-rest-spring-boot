@@ -32,8 +32,8 @@ class UserResourceTest {
     public static final int INDEX = 0;
     public static final String E_MAIL_JA_CADASTRADO_NO_SISTEMA = "E-mail já cadastrado no sistema";
 
-    private User user;
-    private UserDto userDto;
+    private User user = new User();
+    private UserDto userDto = new UserDto();
 
     @Mock
     ModelMapper modelMapper;
@@ -64,6 +64,7 @@ class UserResourceTest {
         assertEquals(ID, userResponse.getBody().getId());
         assertEquals(NAME, userResponse.getBody().getName());
         assertEquals(EMAIL, userResponse.getBody().getEmail());
+        assertEquals(PASSWORD, userResponse.getBody().getPassword());
     }
 
     @Test
@@ -80,6 +81,7 @@ class UserResourceTest {
         assertEquals(ID, userResponse.getBody().get(INDEX).getId());
         assertEquals(NAME, userResponse.getBody().get(INDEX).getName());
         assertEquals(EMAIL, userResponse.getBody().get(INDEX).getEmail());
+        assertEquals(PASSWORD, userResponse.getBody().get(INDEX).getPassword());
     }
 
     @Test
