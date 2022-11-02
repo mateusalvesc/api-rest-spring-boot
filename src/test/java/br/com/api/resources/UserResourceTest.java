@@ -55,33 +55,31 @@ class UserResourceTest {
     void whenFindByIdThenReturnSuccess() {
         when(userService.findById(anyLong())).thenReturn(user);
         when(modelMapper.map(any(), any())).thenReturn(userDto);
-        ResponseEntity<UserDto> response = userResource.findById(ID);
-        assertNotNull(response);
-        assertNotNull(response.getBody());
-        assertEquals(ResponseEntity.class, response.getClass());
-        assertEquals(UserDto.class, response.getBody().getClass());
+        ResponseEntity<UserDto> userResponse = userResource.findById(ID);
+        assertNotNull(userResponse);
+        assertNotNull(userResponse.getBody());
+        assertEquals(ResponseEntity.class, userResponse.getClass());
+        assertEquals(UserDto.class, userResponse.getBody().getClass());
 
-        assertEquals(ID, response.getBody().getId());
-        assertEquals(NAME, response.getBody().getName());
-        assertEquals(EMAIL, response.getBody().getEmail());
-        assertEquals(PASSWORD, response.getBody().getPassword());
+        assertEquals(ID, userResponse.getBody().getId());
+        assertEquals(NAME, userResponse.getBody().getName());
+        assertEquals(EMAIL, userResponse.getBody().getEmail());
     }
 
     @Test
     void whenFindAllThenReturnAListOfUserDto() {
         when(userService.findAll()).thenReturn(List.of(user));
         when(modelMapper.map(any(), any())).thenReturn(userDto);
-        ResponseEntity<List<UserDto>> response = userResource.findAll();
-        assertNotNull(response);
-        assertNotNull(response.getBody());
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(ArrayList.class, response.getBody().getClass());
-        assertEquals(UserDto.class, response.getBody().get(INDEX).getClass());
+        ResponseEntity<List<UserDto>> userResponse = userResource.findAll();
+        assertNotNull(userResponse);
+        assertNotNull(userResponse.getBody());
+        assertEquals(HttpStatus.OK, userResponse.getStatusCode());
+        assertEquals(ArrayList.class, userResponse.getBody().getClass());
+        assertEquals(UserDto.class, userResponse.getBody().get(INDEX).getClass());
 
-        assertEquals(ID, response.getBody().get(INDEX).getId());
-        assertEquals(NAME, response.getBody().get(INDEX).getName());
-        assertEquals(EMAIL, response.getBody().get(INDEX).getEmail());
-        assertEquals(PASSWORD, response.getBody().get(INDEX).getPassword());
+        assertEquals(ID, userResponse.getBody().get(INDEX).getId());
+        assertEquals(NAME, userResponse.getBody().get(INDEX).getName());
+        assertEquals(EMAIL, userResponse.getBody().get(INDEX).getEmail());
     }
 
     @Test
@@ -94,7 +92,19 @@ class UserResourceTest {
     }
 
     @Test
-    void testUpdate() {
+    void whenUpdateThenReturnSuccess() {
+        when(userService.update(userDto)).thenReturn(user);
+        when(modelMapper.map(any(), any())).thenReturn(userDto);
+        ResponseEntity<UserDto> userResponse = userResource.update(ID, userDto);
+        assertNotNull(userResponse);
+        assertNotNull(userResponse.getBody());
+        assertEquals(ResponseEntity.class, userResponse.getClass());
+        assertEquals(UserDto.class, userResponse.getBody().getClass());
+
+        assertEquals(ID, userResponse.getBody().getId());
+        assertEquals(NAME, userResponse.getBody().getName());
+        assertEquals(EMAIL, userResponse.getBody().getEmail());
+
     }
 
     @Test
